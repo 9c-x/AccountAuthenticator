@@ -1,7 +1,9 @@
 package com.udinic.accounts_authenticator_example.authentication;
 
 import android.util.Log;
+
 import com.google.gson.Gson;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -19,12 +21,12 @@ import java.net.URLEncoder;
 
 /**
  * Handles the comminication with Parse.com
- *
+ * <p>
  * User: udinic
  * Date: 3/27/13
  * Time: 3:30 AM
  */
-public class ParseComServerAuthenticate implements ServerAuthenticate{
+public class ParseComServerAuthenticate implements ServerAuthenticate {
     @Override
     public String userSignUp(String name, String email, String pass, String authType) throws Exception {
 
@@ -33,7 +35,7 @@ public class ParseComServerAuthenticate implements ServerAuthenticate{
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url);
 
-        httpPost.addHeader("X-Parse-Application-Id","XUafJTkPikD5XN5HxciweVuSe12gDgk2tzMltOhr");
+        httpPost.addHeader("X-Parse-Application-Id", "XUafJTkPikD5XN5HxciweVuSe12gDgk2tzMltOhr");
         httpPost.addHeader("X-Parse-REST-API-Key", "8L9yTQ3M86O4iiucwWb4JS7HkxoSKo7ssJqGChWx");
         httpPost.addHeader("Content-Type", "application/json");
 
@@ -48,7 +50,7 @@ public class ParseComServerAuthenticate implements ServerAuthenticate{
 
             if (response.getStatusLine().getStatusCode() != 201) {
                 ParseComError error = new Gson().fromJson(responseString, ParseComError.class);
-                throw new Exception("Error creating user["+error.code+"] - " + error.error);
+                throw new Exception("Error creating user[" + error.code + "] - " + error.error);
             }
 
 
@@ -92,20 +94,24 @@ public class ParseComServerAuthenticate implements ServerAuthenticate{
 //        httpGet.getParams().setParameter("username", user).setParameter("password", pass);
 
         String authtoken = null;
-        try {
-            HttpResponse response = httpClient.execute(httpGet);
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            if (response.getStatusLine().getStatusCode() != 200) {
-                ParseComError error = new Gson().fromJson(responseString, ParseComError.class);
-                throw new Exception("Error signing-in ["+error.code+"] - " + error.error);
-            }
-
-            User loggedUser = new Gson().fromJson(responseString, User.class);
-            authtoken = loggedUser.sessionToken;
-
-        } catch (IOException e) {
-            e.printStackTrace();
+//        try {
+//            HttpResponse response = httpClient.execute(httpGet);
+//
+//            String responseString = EntityUtils.toString(response.getEntity());
+//            if (response.getStatusLine().getStatusCode() != 200) {
+//                ParseComError error = new Gson().fromJson(responseString, ParseComError.class);
+//                throw new Exception("Error signing-in ["+error.code+"] - " + error.error);
+//            }
+//
+//            User loggedUser = new Gson().fromJson(responseString, User.class);
+//            authtoken = loggedUser.sessionToken;
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        //模拟假的token
+        if (authtoken == null) {
+            authtoken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtaWQiOiIxMjE3NjY1OCIsInVzZXJfYXV0aF9zdHJpbmciOiIwNzcwYjM3YTliNjlmMGRlMjgwODg1ODhjYjU3N2MyOCIsInV1aWQiOiJmMzkwODU4MDg5NTU4M2M5NzZmMzdhNWVjNWE1MjA1NiIsImluc3RhbGxfaWQiOjQ1MDY3OTI2LCJhZGRfdGltZSI6MTcyMzE3Mzc1MiwibmV3X3V1aWQiOiI3NjQyZDU2ZDhkNmRmZDI3MTdlNGUyNGZhNmY2ZWJkYiJ9.g00s-eqJY-5CqfZIQ-3R6g7suoCv2SWBmrpFaxSXJU4";
         }
 
         return authtoken;
@@ -116,6 +122,7 @@ public class ParseComServerAuthenticate implements ServerAuthenticate{
         int code;
         String error;
     }
+
     private class User implements Serializable {
 
         private String firstName;
