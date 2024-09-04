@@ -31,7 +31,8 @@ public class UdinicAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
         Log.d("udinic", TAG + "> addAccount");
-
+        Log.e(TAG, "addAccount: "+Log.getStackTraceString(new Throwable()));
+        Log.e(TAG, "addAccount: "+response);
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE, accountType);
         intent.putExtra(AuthenticatorActivity.ARG_AUTH_TYPE, authTokenType);

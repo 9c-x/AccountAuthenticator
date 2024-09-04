@@ -3,6 +3,7 @@ package com.udinic.accounts_authenticator_example.authentication;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +14,7 @@ import android.os.IBinder;
 public class UdinicAuthenticatorService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
-
+        Log.e("xfp", "onBind: "+Log.getStackTraceString(new Throwable()));
         UdinicAuthenticator authenticator = new UdinicAuthenticator(this);
         return authenticator.getIBinder();
     }
