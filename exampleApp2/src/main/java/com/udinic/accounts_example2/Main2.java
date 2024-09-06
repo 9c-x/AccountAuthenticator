@@ -8,6 +8,7 @@ import android.accounts.OnAccountsUpdateListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.udinic.accounts_authenticator_example.authentication.AccountGeneral;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import static com.udinic.accounts_authenticator_example.authentication.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
 
@@ -45,7 +51,7 @@ public class Main2 extends Activity {
         findViewById(R.id.btnAddAccount).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AUTHTOKEN_TYPE_FULL_ACCESS);
             }
         });
 
@@ -59,7 +65,7 @@ public class Main2 extends Activity {
         findViewById(R.id.btnGetAuthTokenConvenient).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+                getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AUTHTOKEN_TYPE_FULL_ACCESS);
             }
         });
         findViewById(R.id.btnInvalidateAuthToken).setOnClickListener(new View.OnClickListener() {
@@ -90,6 +96,24 @@ public class Main2 extends Activity {
                 }
             }
         }, null, true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/self/cmdline"), StandardCharsets.US_ASCII));
+                String result = br.readLine();
+                if (result != null) {
+                    result = result.trim();
+                    if (!result.isEmpty()) {
+                        Log.e(TAG, "onCreate: processName:" + result);
+                        //                    return result;
+                    }
+                }
+            } catch (Throwable thr) {
+                Log.e(TAG, "getProcessNameInternal parse cmdline exception:" + thr.getMessage());
+            }
+        }
+
 
     }
 
